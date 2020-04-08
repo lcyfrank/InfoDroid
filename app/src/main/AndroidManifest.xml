@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ck19.infodroid">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".OthersActivity"
+            android:label="Other Information"/>
+        <activity android:name=".UsersActivity"
+            android:label="Users Information"/>
+        <activity android:name=".AppsActivity"
+            android:label="Other Apps Information"/>
+        <activity android:name=".MoreActivity"
+            android:label="About"/>
+        <activity
+            android:name=".SystemActivity"
+            android:label="System Information" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
