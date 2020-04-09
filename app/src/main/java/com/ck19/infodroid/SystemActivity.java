@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class SystemActivity extends AppCompatActivity {
 
     private HashMap<String, Object> getInformation() {
-        HashMap results = new HashMap<String, String>();
+        HashMap results = new HashMap<String, Object>();
         // Object can be String or String[]
         // results.put(key, value);
         // ...
