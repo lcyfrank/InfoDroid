@@ -22,14 +22,26 @@ public class InformationAdapter extends BaseAdapter {
     private List<String> items;
     private List<Integer> titleIndex;
 
+    private HashMap<String, Object>objects;
+
     public InformationAdapter(Context context, HashMap<String, Object>objects) {
         super();
 
         this.context = context;
-        this.titleIndex = new ArrayList<Integer>();
 
+        this.objects = objects;
+
+        this.titleIndex = new ArrayList<Integer>();
         this.items = new ArrayList<String>();
-        for (Map.Entry<String, Object> entry: objects.entrySet()) {
+
+        resetObjects();
+    }
+
+    private void resetObjects() {
+        this.titleIndex.clear();
+        this.items.clear();
+
+        for (Map.Entry<String, Object> entry: this.objects.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
 
@@ -43,6 +55,12 @@ public class InformationAdapter extends BaseAdapter {
                 this.items.addAll(Arrays.asList((String[]) value));
             }
         }
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        this.resetObjects();
+        super.notifyDataSetChanged();
     }
 
     @Override
