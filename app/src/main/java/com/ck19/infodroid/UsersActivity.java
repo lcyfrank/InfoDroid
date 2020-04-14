@@ -7,6 +7,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -59,8 +61,8 @@ public class UsersActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         String ip = (String) results.get("IP");
-                        results.remove("IP");
-//                        adapter.notifyDataSetChanged();
+//                        results.remove("IP");
+                        adapter.notifyDataSetChanged();
                         getLocation((String) ip);
                     }
                 });
@@ -106,6 +108,44 @@ public class UsersActivity extends AppCompatActivity {
         }
     }
 
+    private void getSharedDirectory() {
+        String titles[] = {"Music", "Notifications", "Pictures", "Movies", "Downloads", "Documents"};
+        File files[] = new File[titles.length];
+        // 音乐
+        files[0] = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+        // 通知
+        files[1] = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS);
+        // 图片
+        files[2] = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        // 视频
+        files[3] = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+        // 下载
+        files[4] = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        // 文档
+        files[5] =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        // 闹钟
+//        File alarms = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS);
+        // 播客
+//        File podcasts = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS);
+        // 铃声
+//        File ringtones = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES);
+
+        for (int i = 0; i < titles.length; ++i) {
+            String title = titles[i];
+            File file = files[i];
+            File[] listFiles = file.listFiles();
+            if (listFiles != null && listFiles.length > 0) {
+                String fileNames[] = new String[listFiles.length];
+                for (int j = 0; j < listFiles.length; ++j) {
+                    fileNames[i] = listFiles[i].getName();
+                }
+                results.put(title, fileNames);
+                adapter.notifyDataSetChanged();
+            }
+        }
+
+    }
+
     private HashMap<String, Object> getInformation() {
         // Object can be String or String[]
         // results.put(key, value);
@@ -124,6 +164,7 @@ public class UsersActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         getIp();
-        getStack();
+//        getStack();
+        getSharedDirectory();
     }
 }
