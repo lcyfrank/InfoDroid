@@ -9,8 +9,10 @@ import java.util.HashMap;
 
 public class AppsActivity extends AppCompatActivity {
 
+    private HashMap results = new HashMap<String, Object>();
+    private InformationAdapter adapter = null;
+
     private HashMap<String, Object> getInformation() {
-        HashMap results = new HashMap<String, Object>();
         // Object can be String or String[]
         // results.put(key, value);
         // ...
@@ -24,7 +26,7 @@ public class AppsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_apps);
 
         HashMap<String, Object> results = getInformation();
-        InformationAdapter adapter = new InformationAdapter(AppsActivity.this, results);
+        adapter = new InformationAdapter(AppsActivity.this, results);
         ListView listView = findViewById(R.id.list_system);
         listView.setAdapter(adapter);
     }

@@ -2,10 +2,8 @@ package com.ck19.infodroid;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -30,7 +28,6 @@ import okhttp3.Response;
 public class UsersActivity extends AppCompatActivity {
 
     private static String TAG = "lcy";
-    private static String Url = "http://127.0.0.1:5000";
 
     private HashMap results = new HashMap<String, Object>();
     private InformationAdapter adapter = null;
@@ -150,6 +147,10 @@ public class UsersActivity extends AppCompatActivity {
         // Object can be String or String[]
         // results.put(key, value);
         // ...
+
+        InformationDao dao = new InformationDao(UsersActivity.this);
+        HashMap<String, Object>savedInfos = dao.queryAll(InformationDao.TYPE_USERS);
+        results.putAll(savedInfos);
         return results;
     }
 
@@ -164,7 +165,6 @@ public class UsersActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         getIp();
-//        getStack();
         getSharedDirectory();
     }
 }
