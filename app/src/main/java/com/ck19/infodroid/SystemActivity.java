@@ -1,17 +1,14 @@
 package com.ck19.infodroid;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.net.NetworkInterface;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SystemActivity extends AppCompatActivity {
 
@@ -19,10 +16,13 @@ public class SystemActivity extends AppCompatActivity {
     private InformationAdapter adapter = null;
 
     private HashMap<String, Object> getInformation() {
+        // MAC
+        results.put("WIFI-MAC", getMacFromHardware());
 
-        // Object can be String or String[]
-        // results.put(key, value);
-        // ...
+        // clipboard
+        String clip_result = ClipBoardUtil.paste(getApplicationContext());
+        results.put("CLIPBOARD", clip_result);
+        ClipBoardUtil.listen(getApplicationContext());
 
         //BOARD
         String[] BOARD_ARRAY = new String[2];
@@ -94,5 +94,35 @@ public class SystemActivity extends AppCompatActivity {
         adapter = new InformationAdapter(SystemActivity.this, results);
         ListView listView = findViewById(R.id.list_system);
         listView.setAdapter(adapter);
+    }
+
+    /**
+     * 获取WIFI-MAC地址
+     */
+    private static String getMacFromHardware() {
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(String.format("%02X:", b));
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                return res1.toString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "02:00:00:00:00:00";
     }
 }
