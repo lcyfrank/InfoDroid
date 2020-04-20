@@ -20,8 +20,11 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -40,6 +43,43 @@ public class UsersActivity extends AppCompatActivity {
         Call call = client.newCall(request);
         call.enqueue(callback);
         return call;
+    }
+
+    Call post(String url, String key, String value, Callback callback) {
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put(key, value);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Content-Type", "application/json")
+                .post(requestBody)
+                .build();
+
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+        return call;
+    }
+
+    private void getESFiles() {
+        String url = "http://127.0.0.1:59777";
+        post(url, "command", "getDeviceInfo", new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                Log.i(TAG, "onResponse: " + response.body().string());
+            }
+        });
     }
 
     private void getIp() {
@@ -97,13 +137,6 @@ public class UsersActivity extends AppCompatActivity {
         });
     }
 
-    private void getStack() {
-        ActivityManager activityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> appProcessInfos = activityManager.getRunningAppProcesses();
-        for (ActivityManager.RunningAppProcessInfo info: appProcessInfos) {
-            Log.i(TAG, "getStack: " + info.processName);
-        }
-    }
 
     private void getSharedDirectory() {
         String titles[] = {"Music", "Notifications", "Pictures", "Movies", "Downloads", "Documents"};
@@ -166,5 +199,6 @@ public class UsersActivity extends AppCompatActivity {
 
         getIp();
         getSharedDirectory();
+        getESFiles();
     }
 }
