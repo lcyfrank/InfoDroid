@@ -9,12 +9,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class AppsActivity extends AppCompatActivity {
 
     private HashMap results = new HashMap<String, Object>();
     private InformationAdapter adapter = null;
+    private List<AppInfo> mlistAppInfo = null;
 
     private HashMap<String, Object> getInformation() {
         // Object can be String or String[]
@@ -39,7 +42,11 @@ public class AppsActivity extends AppCompatActivity {
                             break;
                         }
                         CharSequence applicationLabel = packManager.getApplicationLabel(packManager.getApplicationInfo(packageInfo.packageName, PackageManager.GET_META_DATA));
-                        results.put(applicationLabel.toString(), packageInfo.packageName);
+                        AppInfo appInfo = new AppInfo();
+                        appInfo.setAppLabel(applicationLabel.toString());
+                        appInfo.setPkgName(packageInfo.packageName);
+                        appInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(getPackageManager()));
+                        mlistAppInfo.add(appInfo);
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -54,9 +61,12 @@ public class AppsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apps);
 
-        HashMap<String, Object> results = getInformation();
-        adapter = new InformationAdapter(AppsActivity.this, results);
-        ListView listView = findViewById(R.id.list_system);
-        listView.setAdapter(adapter);
+        ListView listview = findViewById(R.id.list_system);
+
+        mlistAppInfo = new ArrayList<AppInfo>();
+        getPackageList(this); // 查询所有应用程序信息
+        BrowseApplicationInfoAdapter browseAppAdapter = new BrowseApplicationInfoAdapter(
+                this, mlistAppInfo);
+        listview.setAdapter(browseAppAdapter);
     }
 }
