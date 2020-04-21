@@ -3,70 +3,63 @@ package com.ck19.infodroid;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class AppsActivity extends AppCompatActivity {
+public class AppsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private HashMap results = new HashMap<String, Object>();
-    private InformationAdapter adapter = null;
-    private List<AppInfo> mlistAppInfo = null;
+    private Button btallapp; // 所有应用程序
+    private Button btsystemapp;// 系统程序
+    private Button btthirdapp; // 第三方应用程序
+    private Button btsdcardapp; // 安装在SDCard的应用程序
 
-    private HashMap<String, Object> getInformation() {
-        // Object can be String or String[]
-        // results.put(key, value);
-        // ...
-        getPackageList(this);
-
-        return results;
-    }
-
-    private void getPackageList(Context ctx) {
-        PackageManager packManager = ctx.getPackageManager();
-        String[] appUid = null;
-        int uid = 1000;
-        while (uid <= 19999) {
-            appUid = packManager.getPackagesForUid(uid);
-            if (appUid != null && appUid.length > 0) {
-                for (String item : appUid) {
-                    try {
-                        final PackageInfo packageInfo = packManager.getPackageInfo(item, 0);
-                        if (packageInfo == null) {
-                            break;
-                        }
-                        CharSequence applicationLabel = packManager.getApplicationLabel(packManager.getApplicationInfo(packageInfo.packageName, PackageManager.GET_META_DATA));
-                        AppInfo appInfo = new AppInfo();
-                        appInfo.setAppLabel(applicationLabel.toString());
-                        appInfo.setPkgName(packageInfo.packageName);
-                        appInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(getPackageManager()));
-                        mlistAppInfo.add(appInfo);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            uid++;
-        }
-    }
+    private int filter = AppinfosActivity.FILTER_ALL_APP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apps);
+        // 初始化控件并监听
+        btallapp = (Button) findViewById(R.id.btallapp);
+        btsystemapp = (Button) findViewById(R.id.btsystemapp);
+        btthirdapp = (Button) findViewById(R.id.btthirdapp);
+        btsdcardapp =(Button) findViewById(R.id.btsdcardapp);
+        btallapp.setOnClickListener(this);
+        btsystemapp.setOnClickListener(this);
+        btthirdapp.setOnClickListener(this);
+        btsdcardapp.setOnClickListener(this);
+    }
 
-        ListView listview = findViewById(R.id.list_system);
-
-        mlistAppInfo = new ArrayList<AppInfo>();
-        getPackageList(this); // 查询所有应用程序信息
-        BrowseApplicationInfoAdapter browseAppAdapter = new BrowseApplicationInfoAdapter(
-                this, mlistAppInfo);
-        listview.setAdapter(browseAppAdapter);
+    @Override
+    public void onClick(View view) {
+        // TODO Auto-generated method stub
+        System.out.println(""+view.getId());
+        switch(view.getId()){
+            case R.id.btallapp	:
+                filter = AppinfosActivity.FILTER_ALL_APP ;
+                break ;
+            case R.id.btsystemapp:
+                filter = AppinfosActivity.FILTER_SYSTEM_APP ;
+                break ;
+            case R.id.btthirdapp:
+                filter = AppinfosActivity.FILTER_THIRD_APP ;
+                break ;
+            case R.id.btsdcardapp:
+                filter = AppinfosActivity.FILTER_SDCARD_APP ;
+                break ;
+        }
+        Intent intent = new Intent(AppsActivity.this, AppinfosActivity.class) ;
+        intent.putExtra("filter", filter) ;
+        startActivity(intent);
     }
 }

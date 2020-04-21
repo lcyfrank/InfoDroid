@@ -13,10 +13,13 @@
         app:layout_constraintStart_toStartOf="parent"
         android:background="#3D2BA3"/>
 
-    <ListView
-        android:id="@+id/list_system"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:orientation="vertical"
+        android:gravity="center"
+
         android:backgroundTint="@color/colorWhite"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="50dp"
@@ -27,7 +30,46 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginRight="20dp"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/list_corner_bg"
-        android:divider="@drawable/item_divider" />
+        app:layout_constraintBottom_toBottomOf="parent">
+        <Button
+            android:id="@+id/btallapp"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textAllCaps="false"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorWhite"
+            android:text="所有App" />
+        <Button
+            android:id="@+id/btsystemapp"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textAllCaps="false"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorWhite"
+            android:text="系统App"/>
+        <Button
+            android:id="@+id/btthirdapp"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textAllCaps="false"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorWhite"
+            android:text="第三方App"/>
+        <Button
+            android:id="@+id/btsdcardapp"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textAllCaps="false"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorWhite"
+            android:text="sdcard中的App"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
