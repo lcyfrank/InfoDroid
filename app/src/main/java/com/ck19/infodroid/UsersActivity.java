@@ -45,43 +45,6 @@ public class UsersActivity extends AppCompatActivity {
         return call;
     }
 
-    Call post(String url, String key, String value, Callback callback) {
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        JSONObject json = new JSONObject();
-
-        try {
-            json.put(key, value);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
-
-        Request request = new Request.Builder()
-                .url(url)
-                .addHeader("Content-Type", "application/json")
-                .post(requestBody)
-                .build();
-
-        Call call = client.newCall(request);
-        call.enqueue(callback);
-        return call;
-    }
-
-    private void getESFiles() {
-        String url = "http://127.0.0.1:59777";
-        post(url, "command", "getDeviceInfo", new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.i(TAG, "onFailure: ");
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                Log.i(TAG, "onResponse: " + response.body().string());
-            }
-        });
-    }
-
     private void getIp() {
         String url = "http://47.96.178.173:8080/ip";
         get(url, new Callback() {
@@ -100,7 +63,7 @@ public class UsersActivity extends AppCompatActivity {
                         String ip = (String) results.get("IP");
 //                        results.remove("IP");
                         adapter.notifyDataSetChanged();
-                        getLocation((String) ip);
+                        getLocation(ip);
                     }
                 });
             }
@@ -199,6 +162,5 @@ public class UsersActivity extends AppCompatActivity {
 
         getIp();
         getSharedDirectory();
-        getESFiles();
     }
 }

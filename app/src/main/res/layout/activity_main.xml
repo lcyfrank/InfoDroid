@@ -82,7 +82,7 @@
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
             android:textColor="@color/colorWhite"
-            android:text="ES 浏览器漏洞"/>
+            android:text="ES Browser"/>
     </LinearLayout>
 
 </LinearLayout>
